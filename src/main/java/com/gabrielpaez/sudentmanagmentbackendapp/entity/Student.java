@@ -1,18 +1,27 @@
-package com.gabrielpaez.sudentmanagmentbackendapp;
+package com.gabrielpaez.sudentmanagmentbackendapp.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Student {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private String name;
+    private String lastName;
     private String email;
-    private String fatherName;
     private String address;
     private String className;
 
-    public Student(String name, String email, String fatherName, String address, String className, Long id) {
+    public Student(String name, String email, String lastName, String address, String className, Long id) {
         this.name = name;
         this.email = email;
-        this.fatherName = fatherName;
+        this.lastName = lastName;
         this.address = address;
         this.className = className;
         this.id = id;
@@ -45,12 +54,12 @@ public class Student {
         this.email = email;
     }
 
-    public String getFatherName() {
-        return fatherName;
+    public String getlastName() {
+        return lastName;
     }
 
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
+    public void setlastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getAddress() {
@@ -71,7 +80,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student [id=" + id + ", name=" + name + ", email=" + email + ", fatherName=" + fatherName + ", address="
+        return "Student [id=" + id + ", name=" + name + ", email=" + email + ", lastName=" + lastName + ", address="
                 + address + ", className=" + className + "]";
     }
 }

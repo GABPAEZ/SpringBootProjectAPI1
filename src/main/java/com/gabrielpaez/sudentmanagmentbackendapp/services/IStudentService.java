@@ -2,7 +2,7 @@ package com.gabrielpaez.sudentmanagmentbackendapp.services;
 
 import java.util.List;
 
-import com.gabrielpaez.sudentmanagmentbackendapp.Student;
+import com.gabrielpaez.sudentmanagmentbackendapp.entity.Student;
 
 public interface IStudentService {
 

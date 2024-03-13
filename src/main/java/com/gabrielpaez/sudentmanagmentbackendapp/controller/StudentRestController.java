@@ -1,11 +1,10 @@
-package com.gabrielpaez.sudentmanagmentbackendapp.rest;
+package com.gabrielpaez.sudentmanagmentbackendapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gabrielpaez.sudentmanagmentbackendapp.Student;
+import com.gabrielpaez.sudentmanagmentbackendapp.entity.Student;
 import com.gabrielpaez.sudentmanagmentbackendapp.services.IStudentService;
 import java.util.*;
 
@@ -23,6 +22,10 @@ public class StudentRestController {
 
     @Autowired
     private IStudentService service;
+
+    public StudentRestController(IStudentService service) {
+        this.service = service;
+    }
 
     @PostMapping("/Student")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
@@ -35,7 +38,9 @@ public class StudentRestController {
     @GetMapping("/Student/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         Student student = service.getStudentById(id);
-        return new ResponseEntity<>(student, HttpStatus.OK);
+        if (student != null)
+            return new ResponseEntity<>(student, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/Students")

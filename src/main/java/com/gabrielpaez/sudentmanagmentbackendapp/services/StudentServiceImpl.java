@@ -2,62 +2,55 @@ package com.gabrielpaez.sudentmanagmentbackendapp.services;
 
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gabrielpaez.sudentmanagmentbackendapp.Student;
+import com.gabrielpaez.sudentmanagmentbackendapp.controller.dao.StudentRepository;
+import com.gabrielpaez.sudentmanagmentbackendapp.entity.Student;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
 
-    // rememeber the arraus are inmutable you cant change the state
+    @Autowired
+    private StudentRepository studentRepository;
 
-    // List<Student> students = Arrays
-    // .asList(new Student("Gabriel", "gabriel@test.com", "jorge", "av. europa 123",
-    // "Java", "1"),
-    // new Student("Sofia", "sofia@test.com", "raul", "Estancia 254", "Python",
-    // "2"),
-    // new Student("Alberto", "alberto@test.com", "nissan", "españa 123",
-    // "abogacia", "3"));
-
-    List<Student> students = new ArrayList<Student>();
-    private Long nextId = 1L;
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student createStudent(Student student) {
 
-        // logic here
+        if (student != null)
+            studentRepository.save(student);
 
-        student.setId(nextId++);
-        students.add(student);
-        System.out.println("Student data " + student);
         return student;
     }
 
     @Override
     public List<Student> getAllstudents() {
 
-        return students;
+        return studentRepository.findAll();
     }
 
     @Override
     public Student getStudentById(Long id) {
 
-        Student student = students.stream()
-                .filter(st -> id.equals(st.getId()))
-                .findAny()
-                .orElse(null);
-
-        return student;
+        if (id != null) {
+            Student student = studentRepository.findById(id).orElse(null);
+            if (student != null)
+                return student;
+        }
+        return null;
     }
 
     @Override
     public Boolean deleteStudentById(Long id) {
 
-        Iterator<Student> iterator = students.iterator();
-        while (iterator.hasNext()) {
-            Student student = iterator.next();
-            if (student.getId() == id) {
-                iterator.remove();
+        if (id != null) {
+            Student student = studentRepository.findById(id).orElse(null);
+            if (student != null) {
+                studentRepository.deleteById(id);
                 return true;
             }
         }
@@ -67,23 +60,21 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public Boolean updateStudentById(Long id, Student studentToUpdate) {
 
-        for (Student student : students) {
-            if (student.getId() == id) {
-                if (studentToUpdate.getName() != null)
-                    student.setName(studentToUpdate.getName());
-                if (studentToUpdate.getAddress() != null)
-                    student.setAddress(studentToUpdate.getAddress());
-                if (studentToUpdate.getClassName() != null)
-                    student.setClassName(studentToUpdate.getClassName());
-                if (studentToUpdate.getEmail() != null)
-                    student.setEmail(studentToUpdate.getEmail());
-                if (studentToUpdate.getFatherName() != null)
-                    student.setFatherName(studentToUpdate.getFatherName());
-                if (studentToUpdate.getId() != null)
-                    student.setId(studentToUpdate.getId());
+        if (id != null) {
+            Optional<Student> studentOptional = studentRepository.findById(id);
+            if (studentOptional.isPresent()) {
+                Student student = studentOptional.get();
+                if(studentToUpdate.getName() != null) student.setName(studentToUpdate.getName());
+                if(studentToUpdate.getlastName() != null) student.setlastName(studentToUpdate.getlastName());
+                if(studentToUpdate.getEmail() != null ) student.setEmail(studentToUpdate.getEmail());
+                if(studentToUpdate.getAddress()!= null) student.setAddress(studentToUpdate.getAddress());
+                if (studentToUpdate.getClassName() != null) student.setClassName(studentToUpdate.getClassName());
+                if(student != null)
+                studentRepository.save(student);
                 return true;
             }
         }
+
         return false;
     }
 }
