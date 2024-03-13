@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +44,6 @@ public class StudentRestController {
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/Student/{id}")
     public ResponseEntity<String> delectStudentById(@PathVariable Long id) {
 
@@ -54,5 +55,13 @@ public class StudentRestController {
         return new ResponseEntity<>("Student not found", HttpStatus.NOT_FOUND);
     }
 
+    @PutMapping("/Student/{id}")
+    public ResponseEntity<String> deleteStudentById(@PathVariable Long id, @RequestBody Student student) {
+
+        boolean updated = service.updateStudentById(id, student);
+        if (updated)
+            return new ResponseEntity<>("Student was udptated successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("Student was not found", HttpStatus.NOT_FOUND);
+    }
 
 }

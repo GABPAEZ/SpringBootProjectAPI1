@@ -26,7 +26,7 @@ public class StudentServiceImpl implements IStudentService {
     public Student createStudent(Student student) {
 
         // logic here
-       
+
         student.setId(nextId++);
         students.add(student);
         System.out.println("Student data " + student);
@@ -58,6 +58,29 @@ public class StudentServiceImpl implements IStudentService {
             Student student = iterator.next();
             if (student.getId() == id) {
                 iterator.remove();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean updateStudentById(Long id, Student studentToUpdate) {
+
+        for (Student student : students) {
+            if (student.getId() == id) {
+                if (studentToUpdate.getName() != null)
+                    student.setName(studentToUpdate.getName());
+                if (studentToUpdate.getAddress() != null)
+                    student.setAddress(studentToUpdate.getAddress());
+                if (studentToUpdate.getClassName() != null)
+                    student.setClassName(studentToUpdate.getClassName());
+                if (studentToUpdate.getEmail() != null)
+                    student.setEmail(studentToUpdate.getEmail());
+                if (studentToUpdate.getFatherName() != null)
+                    student.setFatherName(studentToUpdate.getFatherName());
+                if (studentToUpdate.getId() != null)
+                    student.setId(studentToUpdate.getId());
                 return true;
             }
         }
